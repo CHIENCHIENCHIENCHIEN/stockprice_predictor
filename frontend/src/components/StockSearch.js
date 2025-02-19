@@ -10,13 +10,23 @@ const StockSearch = () => {
     const fetchStockData = async () => {
         try {
             setError(null); // Reset error state before request
-            const response = await axios.get(`https://ubiquitous-capybara-56j5wxq49xj2pvq9-5000.app.github.dev/stock/${ticker}`);
+            
+            // 🔹 Force Axios to always use local API
+            const response = await axios.get(`http://127.0.0.1:5000/stock/${ticker}`, {
+                baseURL: "http://127.0.0.1:5000",  // ✅ Explicitly set baseURL
+                headers: {
+                    "Cache-Control": "no-cache",  // ✅ Prevent caching old URLs
+                }
+            });
+    
             setStockData(response.data);
         } catch (err) {
             setError("Stock not found or server error.");
             console.error("Error fetching stock data:", err);
         }
     };
+    
+    
 
     return (
         <div>
